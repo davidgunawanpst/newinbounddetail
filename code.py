@@ -8,7 +8,7 @@ import base64
 # -- CONFIGURE YOUR GOOGLE SHEET HERE --
 SHEET_ID = "1viV03CJxPsK42zZyKI6ZfaXlLR62IbC0O3Lbi_hfGRo"
 SHEET_NAME = "Master"
-CSV_URL = f"https://docs.google.com/spreadsheets/d/1viV03CJxPsK42zZyKI6ZfaXlLR62IbC0O3Lbi_hfGRo/gviz/tq?tqx=out:csv&sheet=Master"
+CSV_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
 
 @st.cache_data
 def load_po_data():
@@ -54,7 +54,7 @@ if st.button("Submit"):
         timestamp = datetime.now(ZoneInfo("Asia/Jakarta")).strftime("%Y-%m-%d_%H-%M-%S")
         folder_name = f"{selected_db}_{selected_po}_{timestamp}"
 
-        # Step 1: Upload to Drive
+        # Step 1: Upload to Drive - only if there are files
         drive_payload = {
             "folder_name": folder_name,
             "images": [
@@ -63,30 +63,37 @@ if st.button("Submit"):
                     "content": base64.b64encode(file.read()).decode("utf-8")
                 }
                 for file in uploaded_files
-            ]
+            ] if uploaded_files else []
         }
 
         try:
             drive_response = requests.post(DRIVE_WEBHOOK_URL, json=drive_payload)
             if drive_response.status_code == 200:
-                folder_url = drive_response.json().get("folderUrl")
+                drive_json = drive_response.json()
+                folder_url = drive_json.get("folderUrl", "")
+                st.write(f"Drive upload folder URL: {folder_url}")  # Debug info
 
                 # Step 2: Submit to Sheet
-                sheet_payload = {
-                    "entries": [
-                        {
-                            "timestamp": timestamp,
-                            "database": selected_db,
-                            "po_number": selected_po,
-                            "item": item,
-                            "quantity": qty,
-                            "folder_url": folder_url
-                        }
-                        for item, qty in qty_dict.items() if qty > 0
-                    ]
-                }
+                entries = [
+                    {
+                        "timestamp": timestamp,
+                        "database": selected_db,
+                        "po_number": selected_po,
+                        "item": item,
+                        "quantity": qty,
+                        "folder_url": folder_url
+                    }
+                    for item, qty in qty_dict.items() if qty > 0
+                ]
+
+                sheet_payload = {"entries": entries}
 
                 sheet_response = requests.post(SHEET_WEBHOOK_URL, json=sheet_payload)
+
+                # Debug responses
+                st.write(f"Sheet POST status code: {sheet_response.status_code}")
+                st.write(f"Sheet POST response text: {sheet_response.text}")
+
                 if sheet_response.status_code == 200:
                     st.success("Data and photos submitted successfully!")
                 else:
