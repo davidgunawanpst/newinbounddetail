@@ -8,7 +8,7 @@ import base64
 # -- CONFIGURE YOUR GOOGLE SHEET HERE --
 SHEET_ID = "1viV03CJxPsK42zZyKI6ZfaXlLR62IbC0O3Lbi_hfGRo"
 SHEET_NAME = "Master"
-CSV_URL = f"https://docs.google.com/spreadsheets/d/{1K3_X8Dkx_fyulNSTIvMk0wR_Xwky14Yh5MVfGDAipA8}/gviz/tq?tqx=out:csv&sheet={Received}"
+CSV_URL = f"https://docs.google.com/spreadsheets/d/1K3_X8Dkx_fyulNSTIvMk0wR_Xwky14Yh5MVfGDAipA8/gviz/tq?tqx=out:csv&sheet=Received"
 
 @st.cache_data
 def load_po_data():
