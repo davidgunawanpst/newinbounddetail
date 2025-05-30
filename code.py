@@ -28,8 +28,8 @@ def load_po_data():
 database_data = load_po_data()
 
 # -- Replace with your actual script deployment URLs --
-DRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxEiOhhwRjufNg5DLPPYcZCVeNNP2m7Ju_KsGP0UhPGC6myv63qwTbiT5v18q_9H7niog/exec"
-SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxck15H9VYnv4CxcunWx0_u0UTe_0DdJt7Zae-XDWGUph6G5r9Amu-LuKqHmsTy73krvA/exec"
+DRIVE_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyds4um-AHIqGc32-92SbGw1FOfufUPF5QnfqE9CZUpjrw_iAinLwpZgJK8KhFhnUzAsg/exec"
+SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbya11RAnvYCr334dO5M0dl51D40JlGpkEB6kXkg0hPbmzmnbngh3feFlr1GPqZtZQYB1w/exec"
 
 # --- UI ---
 st.title("Inbound Monitoring Form")
