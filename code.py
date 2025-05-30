@@ -88,7 +88,7 @@ if st.button("Submit"):
 
                 sheet_payload = {"entries": entries}
 
-                sheet_response = requests.post(SHEET_WEBHOOK_URL, json=sheet_payload)
+                sheet_response = requests.post(SHEET_WEBHOOK_URL, json=sheet_payload, headers={"Content-Type": "application/json"})
 
                 # Debug responses
                 st.write(f"Sheet POST status code: {sheet_response.status_code}")
